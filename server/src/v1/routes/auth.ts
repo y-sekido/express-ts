@@ -4,6 +4,7 @@ import { body } from "express-validator";
 import { User } from "../models/user";
 import { validate } from "../middleware/validation";
 import { register, login } from "../controllers/user";
+import { verifyToken } from "../middleware/token";
 
 const router = express.Router();
 
@@ -40,6 +41,16 @@ router.post(
   },
   (req: Request, res: Response) => {
     login(req, res);
+  }
+);
+
+router.post(
+  "/verify-token",
+  (req: Request, res: Response, next: NextFunction) => {
+    verifyToken(req, res, next);
+  },
+  (req: Request, res: Response) => {
+    return res.status(200).json({ user: req.body.user });
   }
 );
 
